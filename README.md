@@ -11,7 +11,15 @@ project host and package repository configuration.
 
 ## Configuring your project host
 
-### Configuring a `publish` GitHub Environment
+### Protected branches
+
+### Protected tags
+
+- Settings > Tags > New rule
+- Use a pattern of `*`, even if you have a pattern like `vX.Y.Z`.
+- Select "Add rule"
+
+### Publish GitHub Environment
 
 - Settings > Environments > New Environment
 - Name the environment: `publish`

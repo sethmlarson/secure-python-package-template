@@ -1,8 +1,9 @@
 name: Publish to PyPI
 
 on:
-  tags:
-    - "*"
+  push:
+    tags:
+      - "*"
 
 jobs:
   publish:
