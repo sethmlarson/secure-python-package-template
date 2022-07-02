@@ -1,0 +1,15 @@
+version: 2
+
+updates:
+- package-ecosystem: "github-actions"
+  directory: "/.github/workflows"
+  schedule:
+    interval: "daily"
+
+- package-ecosystem: "pip"
+  directory: "/requirements"
+  schedule:
+    interval: "daily"
+  allow:
+  - dependency-type: "direct"
+  - dependency-type: "indirect"
