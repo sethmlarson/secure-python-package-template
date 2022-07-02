@@ -1,0 +1,3 @@
+pyproject.toml                          @sethmlarson
+.github/                                @sethmlarson
+src/secure_package_template/_version.py @sethmlarson
