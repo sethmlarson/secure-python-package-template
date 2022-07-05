@@ -5,6 +5,10 @@ on:
     tags:
       - "*"
 
+permissions:
+  # Needed to access the workflow's OIDC identity.
+  id-token: "write"
+
 jobs:
   publish:
     name: "Publish"
@@ -26,6 +30,34 @@ jobs:
       run: |
         SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct) \
         python -m build
+
+    - name: "Sign dists"
+      run: |
+        mkdir -p sigstore-artifacts/
+
+        for dist in dist/*; do
+          dist_name=$(basename "${dist}")
+
+          # Sign the dists and then verify them immediately
+          # with the generated artifacts.
+          python -m \
+            sigstore sign "${dist}" \
+            --output-signature sigstore-artifacts/"${dist_name}.sig" \
+            --output-certificate sigstore-artifacts/"${dist_name}.crt"
+
+          python -m \
+            sigstore verify "${dist}" \
+            --cert "sigstore-artifacts/${dist_name}.crt" \
+            --signature "sigstore-artifacts/${dist_name}.sig" \
+            --cert-oidc-issuer https://token.actions.githubusercontent.com
+
+        done
+
+    - uses: "actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8"
+      with:
+        name: "sigstore-artifacts"
+        path: "sigstore-artifacts/*"
+        if-no-files-found: "error"
 
     - uses: "pypa/gh-action-pypi-publish@717ba43cfbb0387f6ce311b169a825772f54d295"
       with:
