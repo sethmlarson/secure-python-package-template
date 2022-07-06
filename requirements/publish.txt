@@ -4,12 +4,10 @@
 #
 #    pip-compile --generate-hashes --output-file=requirements/publish.txt --pip-args='--only-binary=:all:' requirements/publish.in
 #
---only-binary :all:
-
 build==0.8.0 \
     --hash=sha256:19b0ed489f92ace6947698c3ca8436cb0556a66e2aa2d34cd70e2a5d27cd0437 \
     --hash=sha256:887a6d471c901b1a6e6574ebaeeebb45e5269a79d095fe9a8f88d6614ed2e5f0
-    # via -r requirements/publish.in
+    # via -r publish.in
 certifi==2022.6.15 \
     --hash=sha256:84c85a9078b11105f04f3036a9482ae10e4621616db313fe045dd24743a0820d \
     --hash=sha256:fe86415d55e84719d75f8b69414f6438ac3547d2078ab91b67e779ef69378412
@@ -110,14 +108,14 @@ cryptography==37.0.4 \
     # via
     #   pyopenssl
     #   sigstore
-docutils==0.18.1 \
-    --hash=sha256:23010f129180089fbcd3bc08cfefccb3b890b0050e1ca00c867036e9d161b98c \
-    --hash=sha256:679987caf361a7539d76e584cbeddc311e3aee937877c87346f31debc63e9d06
+docutils==0.19 \
+    --hash=sha256:33995a6753c30b7f577febfc2c50411fec6aac7f7ffeb7c4cfe5991072dcf9e6 \
+    --hash=sha256:5e1de4d849fee02c63b040a4a3fd567f4ab104defd8a5511fbbc24a8a017efbc
     # via flit
 flit==3.7.1 \
     --hash=sha256:06a93a6737fa9380ba85fe8d7f28efb6c93c4f4ee9c7d00cc3375a81f33b91a4 \
     --hash=sha256:3c9bd9c140515bfe62dd938c6610d10d6efb9e35cc647fc614fe5fb3a5036682
-    # via -r requirements/publish.in
+    # via -r publish.in
 flit-core==3.7.1 \
     --hash=sha256:14955af340c43035dbfa96b5ee47407e377ee337f69e70f73064940d27d0a44f \
     --hash=sha256:e454fdbf68c7036e1c7435ec7479383f9d9a1650ca5b304feb184eba1efcdcef
@@ -214,7 +212,7 @@ securesystemslib==0.23.0 \
 sigstore==0.6.2 \
     --hash=sha256:6f21b16fa23fcae8ed3ebfcd691412f597c40172b17dc4191f23b48239f0c498 \
     --hash=sha256:e560636112dc09d729097adc5a33f154648ed79f1b3d40359736843e0e351d07
-    # via -r requirements/publish.in
+    # via -r publish.in
 tomli==2.0.1 \
     --hash=sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc \
     --hash=sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f
