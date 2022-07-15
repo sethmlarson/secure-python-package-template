@@ -5,17 +5,34 @@ project host and package repository configuration.
 
 The goals of this project are to:
 
-- Show how to configure a package with automated deployments securely
-- Obtain a perfect rating from OpenSSF Scorecard
-- Integrate with sigstore for signed releases
+- Show how to configure a Python package hosted on GitHub with:
+  - Operational security best-practices
+  - Automated publishing to PyPI
+  - Code quality and vulnerability scanning
+  - Build reproducibility
+  - Signed releases
+- Obtain a perfect rating from [OpenSSF Scorecard](https://github.com/ossf/scorecard)
+- Integrate with [Sigstore](https://www.sigstore.dev/) for signed releases
 
 ## Configuring PyPI
 
+PyPI is increasing the minimum requirements for account security and credential management to make consuming packages on PyPI more secure. This includes [eventually requiring 2FA for all users and requiring API tokens to publish packages](https://pyfound.blogspot.com/2020/01/start-using-2fa-and-api-tokens-on-pypi.html). Instead of waiting for these best practices to become required we can opt-in to them now.
+
 ### Obtain an API token
+
+API tokens will eventually be required for all packages to publish to PyPI.
 
 - Upload a dummy v0.0 package under the desired package name using your PyPI username and password.
 - Create an API token that is scoped to only the package
-- Copy the value into your clipboard, it will be used later.
+- Copy the value into your clipboard, it will be used later (see `PYPI_TOKEN` in the GitHub Environments section below)
+
+### Opt-in to required 2FA
+
+If you don't have 2FA enabled on PyPI already there's a section in the [PyPI Help page](https://pypi.org/help) about how to enable 2FA for your account. To make 2FA required for the new project:
+
+- Open "Your projects" on PyPI
+- Select "Manage" for the project
+- Settings > Enable 2FA requirement for project
 
 ## Configuring the GitHub repository
 
@@ -27,8 +44,8 @@ The goals of this project are to:
 
 ### CodeQL and vulnerable code scanning
 
-- Settings > Code security and analysis
-- Select "Set up"
+- CodeQL is already configured in `.github/workflows/codeql-analysis.yml`
+- Configure as desired after reading the [documentation for CodeQL](https://codeql.github.com/docs).
 
 ### Protected branches
 
@@ -40,6 +57,13 @@ The goals of this project are to:
   - Enable "Dismiss stale pull request approvals when new commits are pushed"
   - Enable "Require review from Code Owners"
 - Enable "Require status checks to pass before merging"
+  - Add all status checks that should be required. For this template they will be:
+    - `Analyze (python)`
+    - `Test (3.8)`
+    - `Test (3.9)`
+    - `Test (3.10)`
+  - Ensure the "source" of all status checks makes sense and isn't set to "Any source".
+    By default this should be configured properly to "GitHub Actions" for all the above status checks.
   - Enable "Require branches to be up to date before merging". **Warning: This will increase the difficulty to receive contributions from new contributors.**
 - Enable "Require signed commits". **Warning: This will increase the difficulty to receive contributions from new contributors.**
 - Enable "Require linear history"
@@ -51,7 +75,7 @@ The goals of this project are to:
 ### Protected tags
 
 - Settings > Tags > New rule
-- Use a pattern of `*`, even if you have a pattern like `vX.Y.Z`.
+- Use a pattern of `*` to protect all tags
 - Select "Add rule"
 
 ### Publish GitHub Environment
