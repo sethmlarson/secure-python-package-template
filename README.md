@@ -14,6 +14,98 @@ The goals of this project are to:
 - Obtain a perfect rating from [OpenSSF Scorecard](https://github.com/ossf/scorecard)
 - Integrate with [Sigstore](https://www.sigstore.dev/) for signed releases
 
+## Creating the GitHub repository
+
+Clone this repository locally:
+
+```sh
+$ git clone ssh://git@github.com/sethmlarson/secure-python-package-template
+
+Cloning into 'secure-python-package-template'...
+...
+Receiving objects: 100% (79/79), 29.37 KiB | 1002.00 KiB/s, done.
+Resolving deltas: 100% (20/20), done.
+```
+
+Rename the folder to the name of the package and remove existing git repository:
+
+```sh
+$ mv secure-python-package-template package-name
+$ cd package-name
+$ rm -rf .git
+```
+
+Create a new git repository and ensure the branch name is `main`:
+
+```sh
+$ git init
+Initialized empty Git repository in .../package-name/.git/
+
+$ git status
+On branch main
+
+No commits yet
+...
+```
+
+If the branch isn't named `main` you can rename the branch:
+
+```sh
+$ git branch -m master main
+```
+
+Create an **empty** repository on GitHub. To ensure the repository is empty you shouldn't add a README file, .gitignore file, or a license yet. For the examples below the GitHub repository will be named `sethmlarson/package-name` but you should substitute that with the GitHub repository name you chose.
+
+We need to tell our git repository about our new GitHub repository:
+
+```sh
+$ git remote add origin ssh://git@github.com/sethmlarson/package-name
+```
+
+Change all the names and URLs be for your own package. Places to update include:
+
+- `README.md`
+- `pyproject.toml` (`project.name` and `project.urls.Home`)
+- `src/{{secure_package_template}}`
+- `tests/test_{{secure_package_template}}.py`
+
+You should also change the license to the one you want to use for the package. Update the value in here:
+
+- `LICENSE`
+- `README.md`
+
+Now we can create our initial commit and ensure it is signed by default:
+
+```sh
+$ git add .
+
+$ git commit -m "Initial commit"
+
+# Verify that this commit is signed. If not you
+# should configure git to auto-sign commits.
+$ git verify-commit HEAD
+gpg: Signature made Fri 15 Jul 2022 10:55:10 AM CDT
+gpg:                using RSA key 9B2E1343B0B201B8883C79E3A99A0A21AD478212
+gpg: Good signature from "Seth Michael Larson <sethmichaellarson@gmail.com>" [ultimate]
+```
+
+Now we push our commit and branch:
+
+```sh
+$ git push origin main
+
+Enumerating objects: 25, done.
+Counting objects: 100% (25/25), done.
+Delta compression using up to 12 threads
+Compressing objects: 100% (21/21), done.
+Writing objects: 100% (25/25), 17.92 KiB | 1.28 MiB/s, done.
+Total 25 (delta 0), reused 0 (delta 0), pack-reused 0
+To ssh://github.com/sethmlarson/package-name
+ * [new branch]      main -> main
+```
+
+Success! You should now see the commit and all files on your GitHub repository.
+
 ## Configuring PyPI
 
 PyPI is increasing the minimum requirements for account security and credential management to make consuming packages on PyPI more secure. This includes [eventually requiring 2FA for all users and requiring API tokens to publish packages](https://pyfound.blogspot.com/2020/01/start-using-2fa-and-api-tokens-on-pypi.html). Instead of waiting for these best practices to become required we can opt-in to them now.

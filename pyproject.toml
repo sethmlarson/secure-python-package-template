@@ -7,6 +7,7 @@ name = "secure_package_template"
 description = "Template for a Python package with a secure project host and package repository configuration."
 authors = [{name = "Seth Michael Larson", email = "sethmichaellarson@gmail.com"}]
 readme = "README.md"
+license = {file = "LICENSE"}
 requires-python = ">=3.7,<4"
 dynamic = ["version"]
 
