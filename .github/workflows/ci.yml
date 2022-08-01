@@ -23,17 +23,19 @@ jobs:
         python-version: ["3.8", "3.9", "3.10"]
 
     name: "Test (${{ matrix.python-version }})"
-    runs-on: ubuntu-latest
+    runs-on: "ubuntu-latest"
     continue-on-error: false
 
     steps:
-    - uses: "actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b"
+    - name: "Checkout repository"
+      uses: "actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b"
 
-    - uses: "actions/setup-python@d09bd5e6005b175076f227b13d9730d56e9dcfcb"
+    - name: "Setup Python"
+      uses: "actions/setup-python@d09bd5e6005b175076f227b13d9730d56e9dcfcb"
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: "${{ matrix.python-version }}"
 
-    - name: "test"
+    - name: "Run tests"
       run: |
         python -m pip install -r requirements/test.txt
         python -m pip install .
