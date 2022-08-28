@@ -73,6 +73,8 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     needs: ["build", "provenance"]
     runs-on: "ubuntu-latest"
+    environment:
+      name: "publish"
 
     # Now that we've built and attested to the distributables
     # provenance we can upload them to PyPI and add to the GitHub release.
