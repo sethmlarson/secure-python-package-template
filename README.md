@@ -1,5 +1,7 @@
 # Secure Python package template
 
+[![SLSA level 3](https://slsa.dev/images/gh-badge-level3.svg)](https://slsa.dev)
+
 Template for a Python package with a secure
 project host and package repository configuration.
 
@@ -10,9 +12,9 @@ The goals of this project are to:
   - Automated publishing to PyPI
   - Code quality and vulnerability scanning
   - Build reproducibility
-  - Signed releases
+  - Releases with provenance attestation
 - Obtain a perfect rating from [OpenSSF Scorecard](https://github.com/ossf/scorecard)
-- Integrate with [Sigstore](https://www.sigstore.dev/) for signed releases
+- [SLSA Level 3](https://slsa.dev) using GitHub OIDC
 
 ## Creating the GitHub repository
 
