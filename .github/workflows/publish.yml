@@ -86,7 +86,7 @@ jobs:
         path: "dist/"
 
     - name: "Publish dists to PyPI"
-      uses: "pypa/gh-action-pypi-publish@37f50c210e3d2f9450da2cd423303d6a14a6e29f"
+      uses: "pypa/gh-action-pypi-publish@e71a4a4c1d3837e77d0353f9229be9217526a2c4"
       with:
         user: __token__
         password: ${{ secrets.PYPI_TOKEN }}
