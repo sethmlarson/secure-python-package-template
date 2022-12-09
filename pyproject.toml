@@ -1,11 +1,13 @@
 [build-system]
-requires = ["flit_core >=3.2,<4"]
-build-backend = "flit_core.buildapi"
+requires = ["hatchling>=1.6.0,<2"]
+build-backend = "hatchling.build"
 
 [project]
 name = "secure_package_template"
 description = "Template for a Python package with a secure project host and package repository configuration."
-authors = [{name = "Seth Michael Larson", email = "sethmichaellarson@gmail.com"}]
+authors = [
+    {name = "Seth Michael Larson", email = "sethmichaellarson@gmail.com"},
+]
 readme = "README.md"
 license = {file = "LICENSE"}
 requires-python = ">=3.7,<4"
@@ -13,3 +15,20 @@ dynamic = ["version"]
 
 [project.urls]
 Home = "https://github.com/sethmlarson/secure-python-package-template"
+
+[tool.hatch.version]
+path = "src/secure_package_template/_version.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/LICENSE",
+    "/CHANGELOG.md"
+]
+
+[tool.scriv]
+version = "literal: src/secure_package_template/_version.py: __version__"
+fragment_directory = "newsfragments"
+format = "md"
+md_header_level = "2"
+entry_title_template = "file: title_template.j2"

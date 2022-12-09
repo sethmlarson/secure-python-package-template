@@ -65,7 +65,6 @@ jobs:
       contents: write
     with:
       base64-subjects: "${{ needs.build.outputs.hashes }}"
-      attestation-name: "artifacts.intoto.jsonl"
       upload-assets: true
 
   publish:
