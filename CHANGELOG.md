@@ -1,6 +1,17 @@
 # Changelog
 <!-- scriv-insert-here -->
 
+<a id='changelog-0.4.0'></a>
+## 0.4.0 (2022-12-09)
+
+### Added
+
+- Added scriv for tracking changelog fragments
+
+### Changed
+
+- Changed from flit to hatch for building the package
+
 ## 0.3.0
 
 ### Added
