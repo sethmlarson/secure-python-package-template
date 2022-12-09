@@ -47,7 +47,7 @@ jobs:
         cd dist && echo "::set-output name=hashes::$(sha256sum * | base64 -w0)"
 
     - name: "Upload dists"
-      uses: "actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8"
+      uses: "actions/upload-artifact@83fd05a356d7e2593de66fc9913b3002723633cb"
       with:
         name: "dist"
         path: "dist/"
@@ -56,7 +56,7 @@ jobs:
 
   provenance:
     needs: ["build"]
-    uses: "slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.2.0"
+    uses: "slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.2.1"
     permissions:
       actions: read
       id-token: write
@@ -66,6 +66,8 @@ jobs:
     with:
       base64-subjects: "${{ needs.build.outputs.hashes }}"
       upload-assets: true
+      # Workaround for slsa-framework/slsa-github-generator#1163
+      compile-generator: true
 
   publish:
     name: "Publish"
