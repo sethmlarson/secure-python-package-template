@@ -16,6 +16,41 @@ The goals of this project are to:
 - Obtain a perfect rating from [OpenSSF Scorecard](https://github.com/ossf/scorecard)
 - [SLSA Level 3](https://slsa.dev) using GitHub OIDC
 
+## Configuring git
+
+Git needs to be configured to be able to sign commits and tags. Git uses GPG for signing, so you need to
+[create a GPG key](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key)
+if you don't have one already. Make sure you use a [email address associated with your GitHub account](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/setting-your-commit-email-address)
+as the email address for the key. If you wish to keep your email address private you should use GitHub's provided `noreply` email address.
+
+```sh
+$ gpg --full-generate-key
+```
+
+After you've generated a GPG key you need to [add the GPG key to your GitHub account](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account).
+Then locally you can [configure git to use your signing key](https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key):
+
+```sh
+$ git config --global --unset gpg.format
+
+# List GPG secret keys, in this example the key ID is '3AA5C34371567BD2'
+$ gpg --list-secret-keys --keyid-format=long
+/Users/hubot/.gnupg/secring.gpg
+------------------------------------
+sec   4096R/3AA5C34371567BD2 2016-03-10 [expires: 2017-03-10]
+uid                          Hubot <hubot@example.com>
+ssb   4096R/4BB6D45482678BE3 2016-03-10
+
+# Tell git about your signing key
+$ git config --global user.signingkey 3AA5C34371567BD2
+
+# Then tell git to auto-sign commits and tags
+$ git config --global commit.gpgsign true
+$ git config --global tag.gpgSign true
+```
+
+Now all commits and tags you create from this git instances will be signed and show up as "verified" on GitHub.
+
 ## Creating the GitHub repository
 
 Clone this repository locally:
