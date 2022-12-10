@@ -1,6 +1,14 @@
 # Changelog
 <!-- scriv-insert-here -->
 
+<a id='changelog-0.5.0'></a>
+## 0.5.0 (2022-12-10)
+
+### Added
+
+- Added instructions for configuring signed commits and tags automatically from git.
+- Added requirement that the triggering git tag be signed in the `publish` GitHub workflow.
+
 <a id='changelog-0.4.0'></a>
 ## 0.4.0 (2022-12-09)
 
