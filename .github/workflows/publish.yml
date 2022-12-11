@@ -26,8 +26,8 @@ jobs:
 
     - name: "Require signed git tag"
       run: |
-        git show ${GITHUB_REF#refs/*/}
-        git verify-tag ${GITHUB_REF#refs/*/}
+        git show ${{ github.ref_name }}
+        git verify-tag ${{ github.ref_name }}
 
     - name: "Setup Python"
       uses: "actions/setup-python@13ae5bb136fac2878aff31522b9efb785519f984"
