@@ -3,13 +3,11 @@ version: 2
 updates:
 - package-ecosystem: "github-actions"
   directory: "/.github/workflows"
-  target-branch: "dependabot"
   schedule:
     interval: "daily"
 
 - package-ecosystem: "pip"
   directory: "/requirements"
-  target-branch: "dependabot"
   schedule:
     interval: "daily"
   allow:
