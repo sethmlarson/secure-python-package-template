@@ -7,7 +7,7 @@
 ### Added
 
 - Added instructions for configuring signed commits and tags automatically from git.
-- Added requirement that the triggering git tag be signed in the `publish` GitHub workflow.
+- Added security policy and instructions for configuring private vulnerability reporting.
 
 <a id='changelog-0.4.0'></a>
 ## 0.4.0 (2022-12-09)

@@ -217,6 +217,13 @@ If you don't have 2FA enabled on PyPI already there's a section in the [PyPI Hel
 - Select "Add secret" in the environment secrets section
 - Add the PyPI API token value under `PYPI_TOKEN`
 
+### Private vulnerability reporting
+
+- Settings > Code security and analysis
+- Select "Enable" for "Private vulnerability reporting". This will allow
+  users to privately submit vulnerability reports directly to the repository.
+- Update the URL in the `SECURITY.md` file to the URL of your own repository.
+
 ## Verifying configurations
 
 ### Verifying reproducible builds
