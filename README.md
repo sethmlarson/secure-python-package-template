@@ -1,6 +1,7 @@
 # Secure Python package template
 
 [![SLSA level 3](https://slsa.dev/images/gh-badge-level3.svg)](https://slsa.dev)
+[![OpenSSF Scorecards](https://api.securityscorecards.dev/projects/github.com/sethmlarson/secure-python-package-template/badge)](https://deps.dev/pypi/secure-package-template)
 
 Template for a Python package with a secure
 project host and package repository configuration.

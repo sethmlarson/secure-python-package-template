@@ -14,7 +14,7 @@ requires-python = ">=3.7,<4"
 dynamic = ["version"]
 
 [project.urls]
-Home = "https://github.com/sethmlarson/secure-python-package-template"
+Source = "https://github.com/sethmlarson/secure-python-package-template"
 
 [tool.hatch.version]
 path = "src/secure_package_template/_version.py"
