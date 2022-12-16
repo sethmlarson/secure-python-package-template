@@ -25,29 +25,38 @@ if you don't have one already. Make sure you use a [email address associated wit
 as the email address for the key. If you wish to keep your email address private you should use GitHub's provided `noreply` email address.
 
 ```sh
-$ gpg --full-generate-key
+gpg --full-generate-key
 ```
 
 After you've generated a GPG key you need to [add the GPG key to your GitHub account](https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account).
 Then locally you can [configure git to use your signing key](https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key):
 
 ```sh
-$ git config --global --unset gpg.format
+git config --global --unset gpg.format
+```
 
-# List GPG secret keys, in this example the key ID is '3AA5C34371567BD2'
+List GPG secret keys, in this example the key ID is '3AA5C34371567BD2'
+
+```sh
 $ gpg --list-secret-keys --keyid-format=long
 /Users/hubot/.gnupg/secring.gpg
 ------------------------------------
 sec   4096R/3AA5C34371567BD2 2016-03-10 [expires: 2017-03-10]
 uid                          Hubot <hubot@example.com>
 ssb   4096R/4BB6D45482678BE3 2016-03-10
+```
 
-# Tell git about your signing key
-$ git config --global user.signingkey 3AA5C34371567BD2
+Tell git about your signing key:
 
-# Then tell git to auto-sign commits and tags
-$ git config --global commit.gpgsign true
-$ git config --global tag.gpgSign true
+```sh
+git config --global user.signingkey 3AA5C34371567BD2
+````
+
+Then tell git to auto-sign commits and tags:
+
+```sh
+git config --global commit.gpgsign true
+git config --global tag.gpgSign true
 ```
 
 Now all commits and tags you create from this git instances will be signed and show up as "verified" on GitHub.
@@ -57,20 +66,15 @@ Now all commits and tags you create from this git instances will be signed and s
 Clone this repository locally:
 
 ```sh
-$ git clone ssh://git@github.com/sethmlarson/secure-python-package-template
-
-Cloning into 'secure-python-package-template'...
-...
-Receiving objects: 100% (79/79), 29.37 KiB | 1002.00 KiB/s, done.
-Resolving deltas: 100% (20/20), done.
+git clone ssh://git@github.com/sethmlarson/secure-python-package-template
 ```
 
 Rename the folder to the name of the package and remove existing git repository:
 
 ```sh
-$ mv secure-python-package-template package-name
-$ cd package-name
-$ rm -rf .git
+mv secure-python-package-template package-name
+cd package-name
+rm -rf .git
 ```
 
 Create a new git repository and ensure the branch name is `main`:
@@ -89,7 +93,7 @@ No commits yet
 If the branch isn't named `main` you can rename the branch:
 
 ```sh
-$ git branch -m master main
+git branch -m master main
 ```
 
 Create an **empty** repository on GitHub. To ensure the repository is empty you shouldn't add a README file, .gitignore file, or a license yet. For the examples below the GitHub repository will be named `sethmlarson/package-name` but you should substitute that with the GitHub repository name you chose.
@@ -97,7 +101,7 @@ Create an **empty** repository on GitHub. To ensure the repository is empty you 
 We need to tell our git repository about our new GitHub repository:
 
 ```sh
-$ git remote add origin ssh://git@github.com/sethmlarson/package-name
+git remote add origin ssh://git@github.com/sethmlarson/package-name
 ```
 
 Change all the names and URLs be for your own package. Places to update include:
@@ -112,15 +116,17 @@ You should also change the license to the one you want to use for the package. U
 - `LICENSE`
 - `README.md`
 
-Now we can create our initial commit and ensure it is signed by default:
+Now we can create our initial commit:
 
 ```sh
-$ git add .
+git add .
 
-$ git commit -m "Initial commit"
+git commit -m "Initial commit"
+```
 
-# Verify that this commit is signed. If not you
-# should configure git to auto-sign commits.
+Verify that this commit is signed. If not you should configure git to auto-sign commits:
+
+```sh
 $ git verify-commit HEAD
 gpg: Signature made Fri 15 Jul 2022 10:55:10 AM CDT
 gpg:                using RSA key 9B2E1343B0B201B8883C79E3A99A0A21AD478212
@@ -233,14 +239,48 @@ If you don't have 2FA enabled on PyPI already there's a section in the [PyPI Hel
 - Pull up the [release page on PyPI](https://pypi.org/project/secure-package-template/0.1.0).
 - Select the "[Download files](https://pypi.org/project/secure-package-template/0.1.0/#files)" tab.
 - For each `.whl` file select "view hashes" and copy the SHA256 and save the value somewhere (`de58d65d34fe9548b14b82976b033b50e55840324053b5501073cb98155fc8af`)
-- Clone the GitHub repository locally. Don't use an existing clone of the repository to avoid tainting the workspace (`$ git clone ssh://git@github.com/sethmlarson/secure-python-package-template`)
-- Check out the corresponding git tag (`$ git checkout v0.1.0`)
-- Run `$ git log -1 --pretty=%ct` and store this value (`1656789393`)
-- Export the stored value into `SOURCE_DATE_EPOCH` (`$ export SOURCE_DATE_EPOCH=1656789393`)
-- Install the dependencies for publishing (`$ python -m pip install -r requirements/publish.txt`)
-- Run `$ python -m build`
-- Run `sha256sum dist/*.whl`
+- Clone the GitHub repository locally. Don't use an existing clone of the repository to avoid tainting the workspace
+
+  ```sh
+  git clone ssh://git@github.com/sethmlarson/secure-python-package-template
+  ```
+
+- Check out the corresponding git tag.
+
+  ```sh
+  git checkout v0.1.0
+  ```
+
+- Run below command and store this value (`1656789393`).
+
+  ```sh
+  git log -1 --pretty=%ct
+
+  ```
+
+- Export the stored value into `SOURCE_DATE_EPOCH`.
+
+  ```sh
+  export SOURCE_DATE_EPOCH=1656789393
+  ```
+
+- Install the dependencies for publishing.
+
+  ```sh
+  python -m pip install -r requirements/publish.txt
+  ```
+
+- Build the distribution.
+
+  ```sh
+  python -m build
+  ```
+
 - Compare SHA256 hashes with the values on PyPI. They should match for each `.whl` file.
+
+  ```sh
+  sha256sum dist/*.whl
+  ```
 
 ## License
 
