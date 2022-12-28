@@ -174,9 +174,53 @@ If you don't have 2FA enabled on PyPI already there's a section in the [PyPI Hel
 
 ### Dependabot
 
+[Dependabot](https://docs.github.com/en/code-security/dependabot) is a service provided by GitHub that keeps your dependencies up-to-date automatically by creating
+pull requests updating individually dependencies on your behalf. Unfortunately, when using Dependabot with any non-trivial number
+of dependencies the number of pull requests quickly becomes too much to handle, especially
+when you think about a single maintainer needing to manage multiple
+projects worth of dependency updates.
+
+The approach taken with Dependabot in this repository is to keep the number of pull requests from
+Dependabot to a minimum while still maintaining a secure and maintained set of
+dependencies for developing and publishing packages. The policy is described below:
+
+- Always create pull requests upgrading dependencies if the pinned version has a public vulnerability.
+  **This is the default behavior of Dependabot and can't be disabled.**
+- Create pull requests when new major versions of development dependencies are made available.
+  This is important because usually major versions contain backwards-incompatible changes so
+  may actually require changes on our part.
+- Create pull requests when there's a new version of a dependency that carries security sensitive data like
+  `certifi`. It's always important to have this package be up-to-date to avoid monster-in-the-middle (MITM) attacks.
+- All other upgrades to dependencies need to be done manually. These are cases like bug fixes that
+  are impacting the project or new features. The developer experience here is the same
+  as if Dependabot wasn't automatically upgrading dependencies.
+
+You can [read the `dependabot.yml` configuration file](https://github.com/sethmlarson/secure-python-package-template/blob/main/.github/dependabot.yml) to learn how to
+encode the above policy or [read the Dependabot documentation](https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file) on the configuration format.
+
+#### Enabling Dependabot
+
 - Settings > Code security and analysis
 - Dependency graph should be enabled. This is the default for public repos.
 - Enable Dependabot security updates
+
+#### Upgrading dependencies manually
+
+Any upgrades to development dependencies to fix bugs or use new features
+will require a manual upgrade instead of relying on Dependabot to keep things up to date
+automatically. This can be done by running the following to upgrade only one package:
+
+```shell
+# We want to only upgrade the 'keyring' package
+# so we use the --upgrade-package option.
+pip-compile \
+  requirements/publish.in \
+  -o requirements/publish.txt \
+  --no-header \
+  --no-annotate \
+  --generate-hashes \
+  --upgrade-package=keyring
+```
 
 ### CodeQL and vulnerable code scanning
 
