@@ -279,52 +279,47 @@ pip-compile \
 
 ### Verifying reproducible builds
 
-- Find the latest release that was done via the publish GitHub Environment. ([v0.1.0](https://github.com/sethmlarson/python-package-template/runs/7163956796?check_suite_focus=true))
-- Pull up the [release page on PyPI](https://pypi.org/project/secure-package-template/0.1.0).
-- Select the "[Download files](https://pypi.org/project/secure-package-template/0.1.0/#files)" tab.
-- For each `.whl` file select "view hashes" and copy the SHA256 and save the value somewhere (`de58d65d34fe9548b14b82976b033b50e55840324053b5501073cb98155fc8af`)
-- Clone the GitHub repository locally. Don't use an existing clone of the repository to avoid tainting the workspace
+Find the latest release that was done via the publish GitHub Environment, I used [v0.1.0](https://github.com/sethmlarson/python-package-template/runs/7163956796?check_suite_focus=true)
+for this example.
 
-  ```sh
-  git clone ssh://git@github.com/sethmlarson/secure-python-package-template
-  ```
+Open the [corresponding release page on PyPI](https://pypi.org/project/secure-package-template/0.1.0).
+Select the "[Download files](https://pypi.org/project/secure-package-template/0.1.0/#files)" tab.
+For each `.whl` file select "view hashes" and copy the SHA256 and save the value somewhere (`de58d65d34fe9548b14b82976b033b50e55840324053b5501073cb98155fc8af`)
 
-- Check out the corresponding git tag.
+Clone the GitHub repository locally. Don't use an existing clone of the repository to avoid tainting the workspace:
 
-  ```sh
-  git checkout v0.1.0
-  ```
+```sh
+git clone ssh://git@github.com/sethmlarson/secure-python-package-template
+```
 
-- Run below command and store this value (`1656789393`).
+Check out the corresponding git tag.
 
-  ```sh
-  git log -1 --pretty=%ct
+```sh
+git checkout v0.1.0
+```
 
-  ```
+Run below command and export the stored value into `SOURCE_DATE_EPOCH`..
 
-- Export the stored value into `SOURCE_DATE_EPOCH`.
+```sh
+$ git log -1 --pretty=%ct
+1656789393
 
-  ```sh
-  export SOURCE_DATE_EPOCH=1656789393
-  ```
+$ export SOURCE_DATE_EPOCH=1656789393
+```
 
-- Install the dependencies for publishing.
+Install the dependencies for publishing and build the package:
 
-  ```sh
-  python -m pip install -r requirements/publish.txt
-  ```
+```sh
+python -m pip install -r requirements/publish.txt
+python -m build
+```
 
-- Build the distribution.
+Compare SHA256 hashes with the values on PyPI, they should match the SHA256 values that we saw on PyPI earlier.
 
-  ```sh
-  python -m build
-  ```
-
-- Compare SHA256 hashes with the values on PyPI. They should match for each `.whl` file.
-
-  ```sh
-  sha256sum dist/*.whl
-  ```
+```sh
+$ sha256sum dist/*.whl
+de58d65d34fe9548b14b82976b033b50e55840324053b5501073cb98155fc8af
+```
 
 ## License
 
