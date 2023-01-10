@@ -19,6 +19,7 @@ jobs:
       name: "publish"
     outputs:
       hashes: ${{ steps.hash.outputs.hashes }}
+      pypi-token: ${{ steps.pypi-token.outputs.pypi-token }}
 
     steps:
     - name: "Checkout repository"
@@ -54,6 +55,16 @@ jobs:
         if-no-files-found: error
         retention-days: 5
 
+    # We forward here rather than add the 'publish' job
+    # to the 'publish' GitHub Environment to avoid needing
+    # to approve the execution twice. Since this job is
+    # depended on by the 'publish' job we get the same
+    # security gating.
+    - name: "Forward 'PYPI_TOKEN' to publish job"
+      id: "pypi-token"
+      run: |
+        echo "pypi-token=${{ secrets.PYPI_TOKEN }}" >> $GITHUB_OUTPUT
+
   Provenance:
     needs: ["Build"]
     uses: "slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.4.0"
@@ -64,7 +75,7 @@ jobs:
       # attestation to the GitHub release.
       contents: write
     with:
-      base64-subjects: "${{ needs.build.outputs.hashes }}"
+      base64-subjects: "${{ needs.Build.outputs.hashes }}"
       upload-assets: true
 
   Publish:
@@ -76,8 +87,6 @@ jobs:
       # contents: write is only needed to upload the
       # dists to the GitHub release.
       contents: write
-    environment:
-      name: "publish"
 
     # Now that we've built and attested to the distributables
     # provenance we can upload them to PyPI and add to the GitHub release.
@@ -98,4 +107,4 @@ jobs:
       uses: "pypa/gh-action-pypi-publish@c7f29f7adef1a245bd91520e94867e5c6eedddcc"
       with:
         user: __token__
-        password: ${{ secrets.PYPI_TOKEN }}
+        password: "${{ needs.Build.outputs.pypi-token }}"
