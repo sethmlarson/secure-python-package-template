@@ -14,9 +14,9 @@
 
 - Changed Dependabot configuration to reduce the total number of opened pull requests without sacrificing timely security fixes or upgrades signalling a new major version.
 
-- Changed the build job to forward `PYPI_TOKEN` to the publish job
-  via `GITHUB_OUTPUT` to avoid needing to approve multiple environment
-  runs in one release.
+- Changed the `publish` job to only use the `publish` GitHub Environment, rather than both `publish` and `build` jobs.
+  This means that there will only be one approval required to publish to PyPI since all other steps before can either be
+  rolled back without harming users (ie deleting GitHub releases, git tags) or are idempotent (provenance attestation).
 
 <a id='changelog-0.5.0'></a>
 ## 0.5.0 (2022-12-10)
