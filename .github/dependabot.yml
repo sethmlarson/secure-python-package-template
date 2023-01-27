@@ -5,17 +5,6 @@ version: 2
 # purely to do with keeping dependencies compatible and supported.
 updates:
 
-# Separate entry for certifi which we want to keep
-# up-to-date with every release, not only majors,
-# because all new releases of certifi are technically
-# "security-sensitive".
-- package-ecosystem: "pip"
-  directory: "/requirements"
-  schedule:
-    interval: "daily"
-  allow:
-  - dependency-name: "certifi"
-
 # These entries are for our development dependencies
 # which we want to keep up to date but only really
 # care about major versions for supportability.
