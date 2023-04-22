@@ -1,6 +1,13 @@
 # Changelog
 <!-- scriv-insert-here -->
 
+<a id='changelog-0.7.0'></a>
+## 0.7.0 (2023-04-22)
+
+### Added
+
+- Added instructions on how to configure a Trusted Publisher.
+
 <a id='changelog-0.6.0'></a>
 ## 0.6.0 (2023-01-10)
 
