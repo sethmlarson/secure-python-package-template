@@ -17,7 +17,12 @@ The goals of this project are to:
 - Obtain a perfect rating from [OpenSSF Scorecard](https://github.com/ossf/scorecard)
 - [SLSA Level 3](https://slsa.dev) using GitHub OIDC
 
-## Configuring git
+## Configuring git for commit and tag signing
+
+> **Info**
+> Commit and tag signing is a practice that's recommended to avoid commit author spoofing
+> but isn't strictly required for a secure project configuration.
+> If you'd like to skip this step, you can jump ahead to [creating a GitHub repository](https://github.com/sethmlarson/secure-python-package-template/#creating-the-github-repository).
 
 Git needs to be configured to be able to sign commits and tags. Git uses GPG for signing, so you need to
 [create a GPG key](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key)
@@ -150,26 +155,6 @@ To ssh://github.com/sethmlarson/package-name
 
 Success! You should now see the commit and all files on your GitHub repository.
 
-## Configuring PyPI
-
-PyPI is increasing the minimum requirements for account security and credential management to make consuming packages on PyPI more secure. This includes [eventually requiring 2FA for all users and requiring API tokens to publish packages](https://pyfound.blogspot.com/2020/01/start-using-2fa-and-api-tokens-on-pypi.html). Instead of waiting for these best practices to become required we can opt-in to them now.
-
-### Obtain an API token
-
-API tokens will eventually be required for all packages to publish to PyPI.
-
-- Upload a dummy v0.0 package under the desired package name using your PyPI username and password.
-- Create an API token that is scoped to only the package
-- Copy the value into your clipboard, it will be used later (see `PYPI_TOKEN` in the GitHub Environments section below)
-
-### Opt-in to required 2FA
-
-If you don't have 2FA enabled on PyPI already there's a section in the [PyPI Help page](https://pypi.org/help) about how to enable 2FA for your account. To make 2FA required for the new project:
-
-- Open "Your projects" on PyPI
-- Select "Manage" for the project
-- Settings > Enable 2FA requirement for project
-
 ## Configuring the GitHub repository
 
 ### Dependabot
@@ -275,6 +260,73 @@ pip-compile \
   users to privately submit vulnerability reports directly to the repository.
 - Update the URL in the `SECURITY.md` file to the URL of your own repository.
 
+## Configuring PyPI
+
+PyPI is increasing the minimum requirements for account security and credential management to make consuming packages on PyPI more secure. This includes [eventually requiring 2FA for all users and requiring API tokens to publish packages](https://pyfound.blogspot.com/2020/01/start-using-2fa-and-api-tokens-on-pypi.html). Instead of waiting for these best practices to become required we can opt-in to them now.
+
+### Opt-in to required 2FA
+
+If you don't have 2FA enabled on PyPI already there's a section in the [PyPI Help page](https://pypi.org/help) about how to enable 2FA for your account. To make 2FA required for the new project:
+
+- Open "Your projects" on PyPI
+- Select "Manage" for the project
+- Settings > Enable 2FA requirement for project
+
+### Configuring a Trusted Publisher
+
+If your project is hosted on GitHub you can take advantage of a new PyPI feature called "[Trusted Publishers](https://docs.pypi.org/trusted-publishers/)".
+It's recommended to use a Trusted Publisher over an API key or password because it provides an additional layer of security
+by requiring the package to originate from a pre-configured GitHub repository, workflow, and environment.
+
+There's a [short guide on how to add a Trusted Publisher to the project](https://docs.pypi.org/trusted-publishers/adding-a-publisher/).
+Below is an example of how to map the publishing GitHub Workflow definition to the PyPI Trusted Publisher.
+
+> **Warning**
+> Care should be taken that the publishing workflow can only be triggered
+> by the GitHub accounts that you intend. Remember that git tags (without Protected Tags enabled)
+> only require write access to the repository. This is why GitHub Environments with
+> a set of required reviewers is highly recommended to have an explicit list of
+> people who are allowed to completely execute the publish job.
+
+Configuring the Trusted Publisher requires 4 values:
+
+- GitHub repository owner
+- GitHub repository name
+- GitHub workflow filename
+- GitHub environment name (optional, but highly recommended!)
+
+Using this repository ([https://github.com/sethmlarson/secure-python-package-template](https://github.com/sethmlarson/secure-python-package-template)) as an example, the values to set up a Trusted Publisher would be:
+
+- GitHub repository owner: `sethmlarson`
+- GitHub repository name: `secure-python-package-template`
+- GitHub workflow filename: `publish.yml`
+- GitHub environment name: `publish`
+
+Below is the minimum configurations required from the GitHub Workflow:
+
+```yaml
+# Filename: '.github/workflows/publish.yml'
+# Note that the 'publish.yml' filename doesn't need the '.github/workflows' prefix.
+jobs:
+  publish:
+    # ...
+    permissions:
+      # This permission allows for the gh-action-pypi-publish
+      # step to access GitHub OpenID Connect tokens.
+      id-token: write
+
+    # This job requires the 'publish' GitHub Environment to run.
+    # This value is also set in the Trusted Publisher.
+    environment:
+      name: "publish"
+
+    steps:
+    # - ...
+    # The 'pypa/gh-action-pypi-publish' action reads OpenID Connect
+    # Note that there's zero config below, it's all magically handled!
+    - uses: "pypa/gh-action-pypi-publish@0bf742be3ebe032c25dd15117957dc15d0cfc38d"
+```
+
 ## Verifying configurations
 
 ### Verifying reproducible builds
@@ -298,7 +350,7 @@ Check out the corresponding git tag.
 git checkout v0.1.0
 ```
 
-Run below command and export the stored value into `SOURCE_DATE_EPOCH`..
+Run below command and export the stored value into `SOURCE_DATE_EPOCH`:
 
 ```sh
 $ git log -1 --pretty=%ct
