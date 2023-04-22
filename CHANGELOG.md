@@ -1,6 +1,13 @@
 # Changelog
 <!-- scriv-insert-here -->
 
+<a id='changelog-0.7.1'></a>
+## 0.7.1 (2023-04-22)
+
+### Changed
+
+- Changed the `build.outputs.hashes` state to use `$GITHUB_OUTPUT` instead of deprecated `::set-output` method.
+
 <a id='changelog-0.7.0'></a>
 ## 0.7.0 (2023-04-22)
 
