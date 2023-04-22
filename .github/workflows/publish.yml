@@ -54,7 +54,7 @@ jobs:
 
   Provenance:
     needs: ["Build"]
-    uses: "slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.4.0"
+    uses: "slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.5.0"
     permissions:
       actions: read
       id-token: write
@@ -70,15 +70,20 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     needs: ["Build", "Provenance"]
     runs-on: "ubuntu-latest"
-    # This environment gives access to 'secrets.PYPI_TOKEN'
-    # and must be approved by environment reviewers before running.
-    environment:
-      name: "publish"
 
     permissions:
       # contents: write is only needed to upload the
       # dists to the GitHub release.
       contents: write
+
+      # This permission allows for the gh-action-pypi-publish
+      # step to access GitHub OpenID Connect tokens.
+      id-token: write
+
+    # This job requires the 'publish' GitHub Environment to run.
+    # This value is also set in the Trusted Publisher.
+    environment:
+      name: "publish"
 
     # Now that we've built and attested to the distributables
     # provenance we can upload them to PyPI and add to the GitHub release.
@@ -96,7 +101,4 @@ jobs:
         gh release upload ${{ github.ref_name }} dist/* --repo ${{ github.repository }}
 
     - name: "Publish dists to PyPI"
-      uses: "pypa/gh-action-pypi-publish@c7f29f7adef1a245bd91520e94867e5c6eedddcc"
-      with:
-        user: __token__
-        password: "${{ secrets.PYPI_TOKEN }}"
+      uses: "pypa/gh-action-pypi-publish@0bf742be3ebe032c25dd15117957dc15d0cfc38d"
