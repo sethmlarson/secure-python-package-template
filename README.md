@@ -260,6 +260,16 @@ pip-compile \
   users to privately submit vulnerability reports directly to the repository.
 - Update the URL in the `SECURITY.md` file to the URL of your own repository.
 
+### Secret scanning
+
+- Settings > Code security and analysis
+- Select "Enable" for "Secret scanning". This will scan and report
+  published tokens to their respective services (like AWS, GCP, GitHub Tokens, etc)
+  so they can be revoked before they're used by a malicious party.
+- Also enable "Push Protection" which scans incoming commits for secrets before they
+  are made publicly available. This should provide even more protection from accidentally
+  publishing secrets to a git repository.
+
 ## Configuring PyPI
 
 PyPI is increasing the minimum requirements for account security and credential management to make consuming packages on PyPI more secure. This includes [eventually requiring 2FA for all users and requiring API tokens to publish packages](https://pyfound.blogspot.com/2020/01/start-using-2fa-and-api-tokens-on-pypi.html). Instead of waiting for these best practices to become required we can opt-in to them now.
